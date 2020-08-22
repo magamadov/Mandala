@@ -9,9 +9,14 @@ import UIKit
 
 class ImageSelector: UIControl {
   
+  var highLightsColor: [UIColor] = [] {
+    didSet {
+      highLightView.backgroundColor = highlightColor(forIndex: selectedIndex)
+    }
+  }
+  
   private let highLightView: UIView = {
     let view = UIView()
-    view.backgroundColor = view.tintColor
     view.translatesAutoresizingMaskIntoConstraints = false
     return view
   }()
@@ -57,6 +62,7 @@ class ImageSelector: UIControl {
       if selectedIndex >= imageButtons.count {
         selectedIndex = imageButtons.count - 1
       }
+      highLightView.backgroundColor = highlightColor(forIndex: selectedIndex)
       let imageButton = imageButtons[selectedIndex]
       highLightViewXConstraint = highLightView.centerXAnchor.constraint(equalTo: imageButton.centerXAnchor)
     }
@@ -83,12 +89,19 @@ class ImageSelector: UIControl {
     }
   }
   
+  private func highlightColor(forIndex index: Int) -> UIColor {
+    guard index >= 0 && index < highLightsColor.count else {
+      return UIColor.blue.withAlphaComponent(0.6)
+    }
+    return highLightsColor[index]
+  }
+  
   @objc private func imageButtonTapped(_ sender: UIButton) {
     guard let buttonIndex = imageButtons.firstIndex(of: sender) else {
       preconditionFailure("This button not yet!")
     }
     
-    let selectionAmimator = UIViewPropertyAnimator(duration: 0.3, dampingRatio: 0.7) {
+    let selectionAmimator = UIViewPropertyAnimator(duration: 0.3, dampingRatio: 0.6) {
       self.selectedIndex = buttonIndex
       self.layoutIfNeeded()
     }
