@@ -113,7 +113,6 @@ class ImageSelector: UIControl {
   override func layoutSubviews() {
     super.layoutSubviews()
     highLightView.layer.cornerRadius = highLightView.bounds.width / 2.0
-    print("сработала функция \(#function)")
   }
   
   override init(frame: CGRect) {
